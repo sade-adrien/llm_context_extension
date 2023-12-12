@@ -1,0 +1,51 @@
+loading file tokenizer.model from cache at /mnt/esperanto/et/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/26bca36bde8333b5d7f72e9ed20ccda6a618af24/tokenizer.model
+loading file added_tokens.json from cache at None
+loading file special_tokens_map.json from cache at /mnt/esperanto/et/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/26bca36bde8333b5d7f72e9ed20ccda6a618af24/special_tokens_map.json
+loading file tokenizer_config.json from cache at /mnt/esperanto/et/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/26bca36bde8333b5d7f72e9ed20ccda6a618af24/tokenizer_config.json
+loading file tokenizer.json from cache at /mnt/esperanto/et/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/26bca36bde8333b5d7f72e9ed20ccda6a618af24/tokenizer.json
+loading weights file model.safetensors from cache at /mnt/esperanto/et/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/26bca36bde8333b5d7f72e9ed20ccda6a618af24/model.safetensors.index.json
+Instantiating MistralForCausalLM model under default dtype torch.float16.
+Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "eos_token_id": 2
+}
+
+VBox(children=(HTML(value='<center> <img\nsrc=https://huggingface.co/front/assets/huggingface_logo-noborder.svg\nalt=\'Hugging Face\'> <br> Copy a token from <a\nhref="https://huggingface.co/settings/tokens" target="_blank">your Hugging Face\ntokens page</a> and paste it below. <br> Immediately click login after copying\nyour token or it might be stored in plain text in this notebook file. </center>'), Password(description='Token:'), Checkbox(value=True, description='Add token as git credential?'), Button(description='Login', style=ButtonStyle()), HTML(value="\n<b>Pro Tip:</b> If you don't already have one, you can create a dedicated\n'notebooks' token with 'write' access, that you can then easily reuse for all\nnotebooks. </center>")), layout=Layout(align_items='center', display='flex', flex_flow='column', width='50%'))
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.85s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.29s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.37s/it]
+All model checkpoint weights were used when initializing MistralForCausalLM.
+
+All the weights of MistralForCausalLM were initialized from the model checkpoint at mistralai/Mistral-7B-v0.1.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use MistralForCausalLM for predictions without further training.
+loading configuration file generation_config.json from cache at /mnt/esperanto/et/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/26bca36bde8333b5d7f72e9ed20ccda6a618af24/generation_config.json
+Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "eos_token_id": 2
+}
+
+Resolving data files:   0%|          | 0/89 [00:00<?, ?it/s]Resolving data files:   1%|          | 1/89 [00:01<02:41,  1.84s/it]Resolving data files:   4%|▍         | 4/89 [00:02<00:40,  2.10it/s]Resolving data files:  13%|█▎        | 12/89 [00:02<00:10,  7.09it/s]Resolving data files: 100%|██████████| 89/89 [00:02<00:00, 34.59it/s]
+Resolving data files:   0%|          | 0/89 [00:00<?, ?it/s]Resolving data files: 100%|██████████| 89/89 [00:00<00:00, 430557.16it/s]
+PyTorch: setting up devices
+max_steps is given, it will override any value given in num_train_epochs
+Using auto half precision backend
+***** Running training *****
+  Num examples = 187,497
+  Num Epochs = 1
+  Instantaneous batch size per device = 1
+  Total train batch size (w. parallel, distributed & accumulation) = 32
+  Gradient Accumulation steps = 32
+  Total optimization steps = 400
+  Number of trainable parameters = 136,056,832
+Automatic Weights & Biases logging enabled, to disable set os.environ["WANDB_DISABLED"] = "true"
+wandb: Currently logged in as: sade-adrien (esperanto). Use `wandb login --relogin` to force relogin
+wandb: wandb version 0.16.1 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.15.12
+wandb: Run data is saved locally in /mnt/datascience1/Adrien/context_extension/wandb/run-20231212_111124-mgw0yrkj
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run treasured-mountain-85
+wandb: ⭐️ View project at https://wandb.ai/esperanto/huggingface
+wandb: 🚀 View run at https://wandb.ai/esperanto/huggingface/runs/mgw0yrkj
+trainable_params: 136,056,832
+  0%|          | 0/400 [00:00<?, ?it/s]`use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`...
+The input hidden states seems to be silently casted in float32, this might be related to the fact you have upcasted embedding or layer norm layers in float32. We will cast back the input in float16.
+  0%|          | 1/400 [03:21<22:18:19, 201.25s/it]                                                     0%|          | 1/400 [03:21<22:18:19, 201.25s/it]  0%|          | 2/400 [06:43<22:19:36, 201.95s/it]                                                     0%|          | 2/400 [06:43<22:19:36, 201.95s/it]  1%|          | 3/400 [10:05<22:16:55, 202.05s/it]                                                     1%|          | 3/400 [10:05<22:16:55, 202.05s/it]  1%|          | 4/400 [13:27<22:12:57, 201.96s/it]                                                     1%|          | 4/400 [13:27<22:12:57, 201.96s/it]  1%|▏         | 5/400 [16:49<22:08:56, 201.86s/it]                                                     1%|▏         | 5/400 [16:49<22:08:56, 201.86s/it]  2%|▏         | 6/400 [20:11<22:05:28, 201.85s/it]                                                     2%|▏         | 6/400 [20:11<22:05:28, 201.85s/it]  2%|▏         | 7/400 [23:33<22:02:55, 201.97s/it]                                                     2%|▏         | 7/400 [23:33<22:02:55, 201.97s/it]  2%|▏         | 8/400 [26:55<22:00:43, 202.15s/it]                                                     2%|▏         | 8/400 [26:55<22:00:43, 202.15s/it]  2%|▏         | 9/400 [30:18<21:58:37, 202.35s/it]                                                     2%|▏         | 9/400 [30:18<21:58:37, 202.35s/it]  2%|▎         | 10/400 [33:41<21:56:04, 202.47s/it]                                                      2%|▎         | 10/400 [33:41<21:56:04, 202.47s/it]  3%|▎         | 11/400 [37:03<21:52:15, 202.40s/it]                                                      3%|▎         | 11/400 [37:03<21:52:15, 202.40s/it]  3%|▎         | 12/400 [40:25<21:47:56, 202.26s/it]                                                      3%|▎         | 12/400 [40:25<21:47:56, 202.26s/it]  3%|▎         | 13/400 [43:47<21:43:47, 202.14s/it]                                                      3%|▎         | 13/400 [43:47<21:43:47, 202.14s/it]  4%|▎         | 14/400 [47:09<21:40:04, 202.09s/it]                                                      4%|▎         | 14/400 [47:09<21:40:04, 202.09s/it]  4%|▍         | 15/400 [50:31<21:37:22, 202.19s/it]                                                      4%|▍         | 15/400 [50:31<21:37:22, 202.19s/it]  4%|▍         | 16/400 [53:54<21:34:57, 202.34s/it]                                                      4%|▍         | 16/400 [53:54<21:34:57, 202.34s/it]  4%|▍         | 17/400 [57:17<21:32:27, 202.47s/it]                                                      4%|▍         | 17/400 [57:17<21:32:27, 202.47s/it]  4%|▍         | 18/400 [1:00:39<21:28:55, 202.45s/it]                                                        4%|▍         | 18/400 [1:00:39<21:28:55, 202.45s/it]  5%|▍         | 19/400 [1:04:01<21:24:56, 202.35s/it]                                                        5%|▍         | 19/400 [1:04:01<21:24:56, 202.35s/it]  5%|▌         | 20/400 [1:07:23<21:20:43, 202.22s/it]                                                        5%|▌         | 20/400 [1:07:23<21:20:43, 202.22s/it]  5%|▌         | 21/400 [1:10:45<21:16:43, 202.12s/it]                                                        5%|▌         | 21/400 [1:10:45<21:16:43, 202.12s/it]  6%|▌         | 22/400 [1:14:07<21:12:48, 202.03s/it]                                                        6%|▌         | 22/400 [1:14:07<21:12:48, 202.03s/it]  6%|▌         | 23/400 [1:17:29<21:09:23, 202.02s/it]                                                        6%|▌         | 23/400 [1:17:29<21:09:23, 202.02s/it]  6%|▌         | 24/400 [1:20:51<21:06:45, 202.14s/it]                                                        6%|▌         | 24/400 [1:20:51<21:06:45, 202.14s/it]  6%|▋         | 25/400 [1:24:14<21:04:33, 202.33s/it]                                                        6%|▋         | 25/400 [1:24:14<21:04:33, 202.33s/it]  6%|▋         | 26/400 [1:27:37<21:02:11, 202.49s/it]                                                        6%|▋         | 26/400 [1:27:37<21:02:11, 202.49s/it]  7%|▋         | 27/400 [1:30:59<20:58:37, 202.46s/it]                                                        7%|▋         | 27/400 [1:30:59<20:58:37, 202.46s/it]  7%|▋         | 28/400 [1:34:22<20:54:38, 202.36s/it]                                                        7%|▋         | 28/400 [1:34:22<20:54:38, 202.36s/it]  7%|▋         | 29/400 [1:37:44<20:50:33, 202.25s/it]                                                        7%|▋         | 29/400 [1:37:44<20:50:33, 202.25s/it]  8%|▊         | 30/400 [1:41:06<20:46:36, 202.15s/it]                                                        8%|▊         | 30/400 [1:41:06<20:46:36, 202.15s/it]
