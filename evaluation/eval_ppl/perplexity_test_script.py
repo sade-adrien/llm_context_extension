@@ -1,10 +1,14 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
+from peft import LoraConfig, get_peft_model
 from datasets import load_dataset
+import matplotlib.pyplot as plt
 from tqdm import tqdm
-from ../../tools import *
+import sys
 import torch
 
-import matplotlib.pyplot as plt
+sys.path.append('/mnt/datascience1/Adrien/context_extension')
+from tools import *
+
 
 device = "cuda"
 context_lengths = [500, 2000, 4000, 8000, 16000, 24000, 32000]
@@ -45,7 +49,7 @@ def main():
     model.enable_input_require_grads()
     model = get_peft_model(model, lora_config)
 
-    load_weights(model, './model_weights/Mistral-7B-v0.1-context_extension-stage1/checkpoint_400.pt')
+    load_weights(model, '../../model_weights/Mistral-7B-v0.1-context_extension-stage1/checkpoint_400.pt')
                                         
     dataset = load_dataset('sade-adrien/redpajama_v2_sample_1M')['train']
 
