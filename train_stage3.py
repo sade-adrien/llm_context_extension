@@ -25,13 +25,13 @@ config.update({'rope_scaling' : {"type": "yarn",
                                 }})  
 
 #training_arguments
-args_output_dir = "model_weights/Mistral-7B-v0.1-context_extension-stage2"
-args_max_steps = 400
+args_output_dir = "model_weights/Mistral-7B-v0.1-context_extension-stage3"
+args_max_steps = 350
 args_eval_freq_default = 50
 args_log_freq_default = 1
 args_save_freq_default = 50
 args_batch_size = 1
-args_learning_rate = 1e-5
+args_learning_rate = 3e-6
 args_lr_scheduler_type = "constant_with_warmup"
 args_num_warmup_steps = 50
 args_gradient_accumulation_steps_default = 32
@@ -57,12 +57,14 @@ def main():
                                                 use_flash_attention_2 = True,
                                                 config = config,)
 
-    dataset = load_dataset('sade-adrien/context_extension-mistral-natural_distribution-16k')['train']
+    dataset = load_dataset('Yukang/LongAlpaca-12k')['train']
+    dataset = dataset.map(build_qa_inputs)
+    dataset = dataset.filter(lambda x: len(x['input_ids']) <= 32768)
     dataset = dataset.shuffle(seed=42)
-    train_dataset, val_dataset = split_dataset(dataset)
+    train_dataset, val_dataset = split_dataset(dataset, 0.9)
     datasets = DatasetDict({
         'train': train_dataset,
-        'val': val_dataset.select(torch.arange(2_000))
+        'val': val_dataset
     })
 
     lora_config = LoraConfig(
@@ -77,7 +79,7 @@ def main():
     model.enable_input_require_grads()
     model = get_peft_model(model, lora_config)
 
-    load_weights(model, './model_weights/Mistral-7B-v0.1-context_extension-stage1/checkpoint_400.pt')
+    load_weights(model, './model_weights/Mistral-7B-v0.1-context_extension-stage2/checkpoint_400.pt')
     
     prepare_lora_plus_training(model)
 
@@ -120,6 +122,10 @@ def main():
     trainer.train()
 
 
+def build_qa_inputs(sample):
+    prompt = '[INST] ' + sample['instruction'] + ' [\INST] ' + sample['output']
+    inputs = tokenizer(prompt)
+    return {'input_ids': inputs['input_ids'], 'attention_mask': inputs['attention_mask'], 'labels': inputs['input_ids']}
 
 
 if __name__ == "__main__":
