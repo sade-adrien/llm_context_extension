@@ -1,3 +1,5 @@
+#~22h + 8h of training + val
+
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig, Trainer, TrainingArguments, logging
 from datasets import load_dataset, DatasetDict, Dataset
 from sklearn.model_selection import train_test_split
