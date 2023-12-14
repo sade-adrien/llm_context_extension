@@ -28,7 +28,7 @@ def load_weights(model, path):
     for key, val in saved_weights['model_state_dict'].items():
         for name, param in model.named_parameters():
             if key == name:
-                param.data = val.data
+                param.data = val.data.to(param.data.dtype)
                 param_count += val.numel()
                 break
     

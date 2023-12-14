@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig
 from datasets import load_dataset
 from tqdm import tqdm
+from ../../tools import *
 import torch
 
 import matplotlib.pyplot as plt
@@ -8,29 +9,43 @@ import matplotlib.pyplot as plt
 device = "cuda"
 context_lengths = [500, 2000, 4000, 8000, 16000, 24000, 32000]
 checkpoint = "mistralai/Mistral-7B-v0.1"
-#checkpoint_lora = "sade-adrien/Mistral-7B-Instruct-v0.1-LC16k-PI-v2"
-#checkpoint_lora = "sade-adrien/Mistral-7B-Instruct-v0.1-LC16k-PI"
-#checkpoint = "lmsys/vicuna-13b-v1.3"
-#checkpoint = "NousResearch/Yarn-Mistral-7b-128k"
-
-
 
 config = AutoConfig.from_pretrained(checkpoint)
-config.update({'sliding_window' : 40_000})  #eliminating sliding window
+config.update({'sliding_window' : 8_192}) 
 config.update({'rope_scaling' : {"type": "yarn",
-                                 "factor": 2,
+                                 "factor": 2, 
                                  "original_max_position_embeddings": 8192,
-                                 "finetuned": False,
+                                 "finetuned": True,
                                 }})  
+
+lora_r_default = 8
+lora_alpha_default = 32
+lora_dropout_default = 0.05
+lora_config = LoraConfig(
+        r=lora_r_default, 
+        lora_alpha=lora_alpha_default, 
+        lora_dropout=lora_dropout_default,
+        bias="none", 
+        task_type="CAUSAL_LM",  
+        target_modules = ["q_proj", "k_proj", "v_proj"],
+        )
 
 
 def main():
     tokenizer = AutoTokenizer.from_pretrained(checkpoint, use_fast = False, revision = 'main')
     model = AutoModelForCausalLM.from_pretrained(checkpoint,
-                                        use_flash_attention_2=True,
-                                        torch_dtype=torch.bfloat16,
-                                        device_map="auto",
-                                        config = config,)
+                                                low_cpu_mem_usage = True,
+                                                torch_dtype = torch.float16,
+                                                revision = 'main',
+                                                device_map = 'auto',
+                                                use_flash_attention_2 = True,
+                                                config = config,)
+    
+
+    model.enable_input_require_grads()
+    model = get_peft_model(model, lora_config)
+
+    load_weights(model, './model_weights/Mistral-7B-v0.1-context_extension-stage1/checkpoint_400.pt')
                                         
     dataset = load_dataset('sade-adrien/redpajama_v2_sample_1M')['train']
 
