@@ -21,6 +21,20 @@ class SaveLoraPlusLayersCallback(TrainerCallback):
             # Save the checkpoint
             torch.save(checkpoint_data, f"{self.output_dir}/checkpoint_{state.global_step}.pt")
 
+
+def load_weights(model, path):
+    saved_weights = torch.load(path)
+    param_count = 0
+    for key, val in saved_weights['model_state_dict'].items():
+        for name, param in model.named_parameters():
+            if key == name:
+                param.data = val.data
+                param_count += val.numel()
+                break
+    
+    print(f'{param_count:,} parameters were loaded successfully.')
+
+
 def prepare_lora_plus_training(model):
     for n,p in model.named_parameters():
         p.requires_grad = False

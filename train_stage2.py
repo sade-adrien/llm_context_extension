@@ -76,7 +76,7 @@ def main():
     model.enable_input_require_grads()
     model = get_peft_model(model, lora_config)
 
-    load_checkpoint(model, './model_weights/...')
+    load_weights(model, './model_weights/Mistral-7B-v0.1-context_extension-stage1/checkpoint_400.pt')
     
     prepare_lora_plus_training(model)
 
