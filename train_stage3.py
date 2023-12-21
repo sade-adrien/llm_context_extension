@@ -31,7 +31,7 @@ args_eval_freq_default = 50
 args_log_freq_default = 1
 args_save_freq_default = 50
 args_batch_size = 1
-args_learning_rate = 3e-6
+args_learning_rate = 2e-6
 args_lr_scheduler_type = "constant_with_warmup"
 args_num_warmup_steps = 50
 args_gradient_accumulation_steps_default = 32
@@ -58,8 +58,8 @@ def main():
                                                 config = config,)
 
     dataset = load_dataset('Yukang/LongAlpaca-12k')['train']
-    dataset = dataset.map(build_qa_inputs)
-    dataset = dataset.filter(lambda x: len(x['input_ids']) <= 32768)
+    dataset = dataset.map(lambda x: build_qa_inputs(x, tokenizer))
+    dataset = dataset.filter(lambda x: len(x['input_ids']) <= 32_768)
     dataset = dataset.shuffle(seed=42)
     train_dataset, val_dataset = split_dataset(dataset, 0.9)
     datasets = DatasetDict({
@@ -122,7 +122,7 @@ def main():
     trainer.train()
 
 
-def build_qa_inputs(sample):
+def build_qa_inputs(sample, tokenizer):
     prompt = '[INST] ' + sample['instruction'] + ' [\INST] ' + sample['output']
     inputs = tokenizer(prompt)
     return {'input_ids': inputs['input_ids'], 'attention_mask': inputs['attention_mask'], 'labels': inputs['input_ids']}

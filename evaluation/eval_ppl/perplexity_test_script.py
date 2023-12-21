@@ -17,7 +17,7 @@ checkpoint = "mistralai/Mistral-7B-v0.1"
 config = AutoConfig.from_pretrained(checkpoint)
 config.update({'sliding_window' : 8_192}) 
 config.update({'rope_scaling' : {"type": "yarn",
-                                 "factor": 2, 
+                                 "factor": 4, 
                                  "original_max_position_embeddings": 8192,
                                  "finetuned": True,
                                 }})  
@@ -49,7 +49,7 @@ def main():
     model.enable_input_require_grads()
     model = get_peft_model(model, lora_config)
 
-    load_weights(model, '../../model_weights/Mistral-7B-v0.1-context_extension-stage1/checkpoint_400.pt')
+    load_weights(model, '../../model_weights/Mistral-7B-v0.1-context_extension-stage2/checkpoint_400.pt')
                                         
     dataset = load_dataset('sade-adrien/redpajama_v2_sample_1M')['train']
 
