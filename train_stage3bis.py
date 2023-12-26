@@ -1,5 +1,5 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig, Trainer, TrainingArguments, logging
-from datasets import load_dataset, DatasetDict, Dataset
+from datasets import load_dataset, concatenate_datasets, DatasetDict, Dataset
 from sklearn.model_selection import train_test_split
 from peft import LoraConfig, get_peft_model
 from huggingface_hub import notebook_login
