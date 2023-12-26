@@ -86,10 +86,10 @@ def run_test(model, tokenizer, dataset, context_length):
             i += 1
     
 
-    plt.plot(PPL)
-    plt.savefig(f'ppl_{context_length}.png')
-    plt.show()
-    plt.clf()
+    #plt.plot(PPL)
+    #plt.savefig(f'ppl_{context_length}.png')
+    #plt.show()
+    #plt.clf()
     
     model.train()
     return PPL[-1]

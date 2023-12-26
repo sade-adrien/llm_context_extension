@@ -8,6 +8,9 @@ import transformers
 import argparse
 from LEval_config import *
 from tqdm import tqdm
+from peft import LoraConfig, get_peft_model
+sys.path.append('/mnt/datascience1/Adrien/context_extension')
+from tools import *
 
 
 def main():
@@ -16,7 +19,7 @@ def main():
     for file_name in key_data_pairs:
         fw = open(file_name, "w")
         data = key_data_pairs[file_name]
-        B_INST, E_INST = "[INST]", "[/INST]"
+        B_INST, E_INST = "[INST]", "[\INST]" ################ to switch back to /
         sys_prompt = get_sys_prompt(args, file_name)
 
         for d in tqdm(data):
@@ -98,16 +101,18 @@ if __name__ == "__main__":
     parser.add_argument('--flash', action='store_true', help='set this if you want to use flash attention')
     args = parser.parse_args()
 
-    model_path = "mistralai/Mistral-7B-Instruct-v0.1"
-    open_source_model = "mistralai/Mistral-7B-Instruct-v0.1-LC16k-PI-" + args.max_length #+ "-noSW"
+    model_path = "mistralai/Mistral-7B-v0.1"
+    open_source_model = "mistralai/Mistral-7B-v0.1-context_extension-stage3-" + args.max_length #+ "-noSW"
 
     max_length = k_to_number(args.max_length) - max_new_tokens
 
     config = AutoConfig.from_pretrained(model_path)
-    #config.update({'sliding_window' : 15_000})  #removing sliding window
-    config.update({'rope_scaling' : {"type": "linear",
-                                 "factor": 8192/16400,
-                                }})             #Position Interpolation
+    config.update({'sliding_window' : 8_192}) 
+    config.update({'rope_scaling' : {"type": "yarn",
+                                    "factor": 4, 
+                                    "original_max_position_embeddings": 8192,
+                                    "finetuned": True,
+                                    }})  
     if args.flash:
         config.update({'_flash_attn_2_enabled' : True})  #Flash Attention
 
@@ -116,11 +121,27 @@ if __name__ == "__main__":
 
     device = torch.device(f'cuda:{args.gpu}' if torch.cuda.is_available() else 'cpu')
 
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True, config=config)
-    model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True, config=config, torch_dtype=torch.bfloat16).to(device)
+    tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast = False, revision = 'main')
+    model = AutoModelForCausalLM.from_pretrained(model_path,
+                                                low_cpu_mem_usage = True,
+                                                torch_dtype = torch.bfloat16,
+                                                revision = 'main',
+                                                device_map = 'auto',
+                                                config = config,)
     
-    peft_model_id = 'sade-adrien/Mistral-7B-Instruct-v0.1-LC16k-PI-v2'
-    model.load_adapter(peft_model_id)
+    lora_config = LoraConfig(
+        r=8, 
+        lora_alpha=32, 
+        lora_dropout=0.05,
+        bias="none", 
+        task_type="CAUSAL_LM",  
+        target_modules = ["q_proj", "k_proj", "v_proj"],
+        )
+
+    model.enable_input_require_grads()
+    model = get_peft_model(model, lora_config)
+
+    load_weights(model, '../../model_weights/Mistral-7B-v0.1-context_extension-stage3/checkpoint_350.pt')
 
     model = model.eval()
 
