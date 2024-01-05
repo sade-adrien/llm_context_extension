@@ -49,7 +49,7 @@ def main():
     model.enable_input_require_grads()
     model = get_peft_model(model, lora_config)
 
-    load_weights(model, '../../model_weights/Mistral-7B-v0.1-context_extension-stage2/checkpoint_400.pt')
+    load_weights(model, '../model_weights/Mistral-7B-v0.1-context_extension-stage3bis/checkpoint_2400.pt')
                                         
     dataset = load_dataset('sade-adrien/redpajama_v2_sample_1M')['train']
 

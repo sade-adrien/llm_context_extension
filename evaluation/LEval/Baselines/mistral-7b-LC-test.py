@@ -19,7 +19,7 @@ def main():
     for file_name in key_data_pairs:
         fw = open(file_name, "w")
         data = key_data_pairs[file_name]
-        B_INST, E_INST = "[INST]", "[\INST]" ################ to switch back to /
+        B_INST, E_INST = "[INST]", "[/INST]" 
         sys_prompt = get_sys_prompt(args, file_name)
 
         for d in tqdm(data):
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     model_path = "mistralai/Mistral-7B-v0.1"
-    open_source_model = "mistralai/Mistral-7B-v0.1-context_extension-stage3-" + args.max_length #+ "-noSW"
+    open_source_model = "mistralai/Mistral-7B-v0.1-context_extension-stage3bis-" + args.max_length #+ "-noSW"
 
     max_length = k_to_number(args.max_length) - max_new_tokens
 
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     model.enable_input_require_grads()
     model = get_peft_model(model, lora_config)
 
-    load_weights(model, '../../model_weights/Mistral-7B-v0.1-context_extension-stage3/checkpoint_350.pt')
+    load_weights(model, '../../model_weights/Mistral-7B-v0.1-context_extension-stage3bis/checkpoint_2400.pt')
 
     model = model.eval()
 
