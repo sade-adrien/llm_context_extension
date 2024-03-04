@@ -1,6 +1,6 @@
 ## LLM Context Extension
 
-This project is an application of the YaRN method for extending the context window of a LLM. 
+This project is an application of the YaRN method for extending the context window of a LLM: https://arxiv.org/abs/2309.00071
 
 We extend the context of Mistral-7B in three steps:
 * 1. Continuing the pre-training, with fixed-size 16k-token long examples (from RedPajama-2 dataset)
